@@ -1,5 +1,4 @@
 """Utilities for downloading data from WMT, tokenizing, vocabularies."""
-"""此版本为修正到中文的版本"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -180,30 +179,27 @@ def data_to_token_ids(data_path, target_path, vocabulary_path,
 
 
 def prepare_dialog_data(data_dir, vocabulary_size):
-  """
-  提前获取准备语料，创建词表，并且分词
-
-  Get dialog data into data_dir, create vocabularies and tokenize data.
+  """Get dialog data into data_dir, create vocabularies and tokenize data.
 
   Args:
-    data_dir: 文件的目录
-    vocabulary_size: 词表的大小
+    data_dir: directory in which the data sets will be stored.
+    vocabulary_size: size of the English vocabulary to create and use.
 
   Returns:
-    A tuple of 3 elements: 返回一个三元组
+    A tuple of 3 elements:
       (1) path to the token-ids for chat training data-set,
       (2) path to the token-ids for chat development data-set,
       (3) path to the chat vocabulary file
   """
-  # Get dialog data to the specified directory. 将数据转移到特定的目录
+  # Get dialog data to the specified directory.
   train_path = get_dialog_train_set_path(data_dir)
   dev_path = get_dialog_dev_set_path(data_dir)
 
-  # Create vocabularies of the appropriate sizes.创建词表
+  # Create vocabularies of the appropriate sizes.
   vocab_path = os.path.join(data_dir, "vocab%d.in" % vocabulary_size)
   create_vocabulary(vocab_path, train_path + ".in", vocabulary_size)
 
-  # Create token ids for the training data. 创建Tokenized ID
+  # Create token ids for the training data.
   train_ids_path = train_path + (".ids%d.in" % vocabulary_size)
   data_to_token_ids(train_path + ".in", train_ids_path, vocab_path)
 
@@ -215,9 +211,7 @@ def prepare_dialog_data(data_dir, vocabulary_size):
 
 
 def read_data(tokenized_dialog_path, max_size=None):
-  """
-  从已经分好词的文件地址读取文件
-  Read data from source file and put into buckets.
+  """Read data from source file and put into buckets.
 
   Args:
     source_path: path to the files with token-ids.

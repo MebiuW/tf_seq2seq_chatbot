@@ -18,13 +18,14 @@ from tf_seq2seq_chatbot.lib import data_utils
 
 
 def train():
-    print("Preparing dialog data in %s" % FLAGS.data_dir)
+    # 从FLAGS.data_dir所指定的地方，加载对话数据
+    print("正在加载对话语料库 %s" % FLAGS.data_dir)
     train_data, dev_data, _ = data_utils.prepare_dialog_data(FLAGS.data_dir, FLAGS.vocab_size)
 
     with tf.Session() as sess:
 
-        # Create model.
-        print("Creating %d layers of %d units." % (FLAGS.num_layers, FLAGS.size))
+        # 创建模型
+        print("正在创建模型： %d 层 %d 节点." % (FLAGS.num_layers, FLAGS.size))
         model = create_model(sess, forward_only=False)
 
         # Read data into buckets and compute their sizes.
@@ -33,7 +34,7 @@ def train():
         train_set = read_data(train_data, FLAGS.max_train_data_size)
         train_bucket_sizes = [len(train_set[b]) for b in xrange(len(BUCKETS))]
         train_total_size = float(sum(train_bucket_sizes))
-
+        # bucket -> 桶
         # A bucket scale is a list of increasing numbers from 0 to 1 that we'll use
         # to select a bucket. Length of [scale[i], scale[i+1]] is proportional to
         # the size if i-th training bucket, as used later.

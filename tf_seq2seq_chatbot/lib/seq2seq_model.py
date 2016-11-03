@@ -48,7 +48,20 @@ class Seq2SeqModel(object):
                learning_rate_decay_factor, use_lstm=False,
                num_samples=512, forward_only=False):
     """Create the model.
-
+    参数：
+        source_vocab_size：Source端的字典大小
+        target_vocab_size：Target端的字典大小
+        buckets：是一个(I,O) 组成的list，其中I明确了在对应的bucket中输入的最大长度，而O则是当前bucket中输出的最大长度
+                在训练当中，如果有某个输入或者某个输出的长度大于I或O，那么将会分拆到下一个bucket当中
+                示例：[(2, 4), (8, 16)]
+        size：模型当中每一层的节点数量
+        max_gradient_norm： gradients will be clipped to maximally this norm.
+        batch_size：在训练过程中，batch的大小
+            因为模型的构造不依赖这个参数，所以也可以随后指定
+        learning_rate：学习速率
+        learning_rate_decay_factor：decay learning rate by this much when needed.
+        use_lstm：是否使用LSTM单元，如果设置为False，则使用GRU单元
+        forward_only: if set, we do not construct the backward pass in the model.
     Args:
       source_vocab_size: size of the source vocabulary.
       target_vocab_size: size of the target vocabulary.
@@ -95,6 +108,7 @@ class Seq2SeqModel(object):
       softmax_loss_function = sampled_loss
 
     # Create the internal multi-layer cell for our RNN.
+    # 创建内部RNN
     single_cell = tf.nn.rnn_cell.GRUCell(size)
     if use_lstm:
       single_cell = tf.nn.rnn_cell.BasicLSTMCell(size)
