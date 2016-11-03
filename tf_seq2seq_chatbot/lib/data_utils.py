@@ -1,9 +1,9 @@
+#coding:utf-8
 """Utilities for downloading data from WMT, tokenizing, vocabularies."""
-"""此版本为修正到中文的版本"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
+#coding:utf-8
 import os
 import re
 import sys

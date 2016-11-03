@@ -1,3 +1,4 @@
+#coding:utf-8
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -28,10 +29,10 @@ def create_model(session, forward_only):
 
   ckpt = tf.train.get_checkpoint_state(FLAGS.model_dir)
   if ckpt and gfile.Exists(ckpt.model_checkpoint_path):
-    print("Reading model parameters from %s" % ckpt.model_checkpoint_path)
+    print("将会从如下地址读取训练参数Reading model parameters from %s" % ckpt.model_checkpoint_path)
     model.saver.restore(session, ckpt.model_checkpoint_path)
   else:
-    print("Created model with fresh parameters.")
+    print("模型已经创建完毕，使用了全新的参数 Created model with fresh parameters.")
     session.run(tf.initialize_all_variables())
   return model
 

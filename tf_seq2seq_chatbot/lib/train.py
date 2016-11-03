@@ -1,3 +1,4 @@
+#coding:utf-8
 import sys
 import os
 import math
@@ -29,7 +30,7 @@ def train():
         model = create_model(sess, forward_only=False)
 
         # Read data into buckets and compute their sizes.
-        print ("Reading development and training data (limit: %d)." % FLAGS.max_train_data_size)
+        print ("正在读取处理开发和训练的数据 Reading development and training data (限制 limit: %d)." % FLAGS.max_train_data_size)
         dev_set = read_data(dev_data)
         train_set = read_data(train_data, FLAGS.max_train_data_size)
         train_bucket_sizes = [len(train_set[b]) for b in xrange(len(BUCKETS))]
