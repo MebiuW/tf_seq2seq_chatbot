@@ -95,6 +95,7 @@ class Seq2SeqModel(object):
     # If we use sampled softmax, we need an output projection.
     output_projection = None
     softmax_loss_function = None
+    # 是否使用sampled softmax
     # Sampled softmax only makes sense if we sample less than vocabulary size.
     if num_samples > 0 and num_samples < self.target_vocab_size:
       w = tf.get_variable("proj_w", [size, self.target_vocab_size])

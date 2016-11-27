@@ -85,6 +85,7 @@ def create_vocabulary(vocabulary_path, data_path, max_vocabulary_size,
       with gfile.GFile(vocabulary_path, mode="w") as vocab_file:
         for w in vocab_list:
           vocab_file.write(w + "\n")
+    print ('Vocabulary Size :%s' % len(vocab))
 
 
 def initialize_vocabulary(vocabulary_path):
@@ -217,6 +218,7 @@ def prepare_dialog_data(data_dir, vocabulary_size):
 def read_data(tokenized_dialog_path, max_size=None):
   """
   从已经分好词的文件地址读取文件
+  返回的值：按照tokens分到不同的buckets上进行排序
   Read data from source file and put into buckets.
 
   Args:
@@ -231,23 +233,24 @@ def read_data(tokenized_dialog_path, max_size=None):
       len(target) < _buckets[n][1]; source and target are lists of token-ids.
   """
   data_set = [[] for _ in BUCKETS]
-
+  print ('reading from ')
   with gfile.GFile(tokenized_dialog_path, mode="r") as fh:
       source, target = fh.readline(), fh.readline()
       counter = 0
       while source and target and (not max_size or counter < max_size):
         counter += 1
-        if counter % 100000 == 0:
+        if counter % 50000 == 0:
           print("  reading data line %d" % counter)
           sys.stdout.flush()
 
         source_ids = [int(x) for x in source.split()]
         target_ids = [int(x) for x in target.split()]
         target_ids.append(EOS_ID)
-
+        #分箱保存
         for bucket_id, (source_size, target_size) in enumerate(BUCKETS):
           if len(source_ids) < source_size and len(target_ids) < target_size:
             data_set[bucket_id].append([source_ids, target_ids])
             break
         source, target = fh.readline(), fh.readline()
+      print('finished reading counts: %s' % counter)
   return data_set
